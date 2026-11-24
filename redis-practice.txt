@@ -1,0 +1,29 @@
+DEL lab:takeout:sales:d101 lab:takeout:sales:d102 lab:takeout:sales:d103 lab:takeout:sales:rank
+MSET lab:takeout:sales:d101 12 lab:takeout:sales:d102 8 lab:takeout:sales:d103 20
+ZADD lab:takeout:sales:rank 12 d101 8 d102 20 d103
+MGET lab:takeout:sales:d101 lab:takeout:sales:d102 lab:takeout:sales:d103
+MULTI
+INCR lab:takeout:sales:d101
+ZINCRBY lab:takeout:sales:rank 1 d101
+EXEC
+MGET lab:takeout:sales:d101 lab:takeout:sales:d102 lab:takeout:sales:d103
+TYPE lab:takeout:sales:d101
+TYPE lab:takeout:sales:rank
+ZRANGE lab:takeout:sales:rank 0 2 REV WITHSCORES
+ZSCORE lab:takeout:sales:rank d101
+ZCARD lab:takeout:sales:rank
+DEL lab:takeout:dish:d101:detail lab:takeout:cart:u1001 lab:takeout:favorites:u1001 lab:takeout:search:hot lab:takeout:order:o1001
+SET lab:takeout:dish:d101:detail '{"id":"d101","name":"宫保鸡丁饭","price":18}' EX 300
+RPUSH lab:takeout:cart:u1001 d101 d102
+SADD lab:takeout:favorites:u1001 d101 d101 d103
+ZADD lab:takeout:search:hot 30 d101 45 d102 20 d103
+HSET lab:takeout:order:o1001 userId u1001 status CREATED totalAmount 36
+TYPE lab:takeout:dish:d101:detail
+TYPE lab:takeout:cart:u1001
+TYPE lab:takeout:favorites:u1001
+TYPE lab:takeout:search:hot
+TYPE lab:takeout:order:o1001
+LRANGE lab:takeout:cart:u1001 0 -1
+SCARD lab:takeout:favorites:u1001
+ZRANGE lab:takeout:search:hot 0 2 REV WITHSCORES
+HGETALL lab:takeout:order:o1001
